@@ -1,0 +1,16 @@
+﻿@page "/importtolocal"
+
+@using ReqResLiteDb.Data
+@inject UserPersistenceService UserPersistenceService
+
+<h1>Import Users from ReqResIn</h1>
+
+<button @onclick="OnImportAsync">Import from ReqRes</button>
+
+
+@code {
+    async Task OnImportAsync()
+    {
+       await UserPersistenceService.ImportFromApi();
+    }
+}

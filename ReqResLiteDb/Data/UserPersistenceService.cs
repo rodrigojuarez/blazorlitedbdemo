@@ -29,5 +29,11 @@ namespace ReqResLiteDb.Data
       {
          Users.DeleteAll();
       }
+
+      public void Delete(int id)
+      {
+         Users.Delete(id);
+      }
+
    }
 }

@@ -1,21 +1,33 @@
-﻿using System.Threading.Tasks;
+﻿using LiteDB;
+using System.Threading.Tasks;
 
 namespace ReqResLiteDb.Data
 {
    public class UserPersistenceService
    {
-      private readonly UserApiService userApiService;
+      readonly LiteDatabase _db;
+      readonly UserApiService userApiService;
 
       public UserPersistenceService(UserApiService userApiService)
       {
          this.userApiService = userApiService;
+         _db = new LiteDatabase("Filename=ReqResLiteDB.db;connection=shared");
+         Users.EnsureIndex(x => x.Id);
       }
+
+      public ILiteCollection<User> Users => _db.GetCollection<User>();
+
 
       public async Task ImportFromApi()
       {
+         Users.DeleteAll();
          var users = await userApiService.GetUsers();
+         Users.InsertBulk(users);
+      }
 
-         // TODO: to litedb
+      public void DeleteAll()
+      {
+         Users.DeleteAll();
       }
    }
 }

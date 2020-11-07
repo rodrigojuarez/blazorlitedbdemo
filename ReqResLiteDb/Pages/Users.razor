@@ -1,7 +1,7 @@
 ﻿@page "/users"
 
 @using ReqResLiteDb.Data
-@inject UserApiService UserService
+@inject UserPersistenceService UserPersistenceService
 
 <h1>Show saved Users from ReqResIn</h1>
 
@@ -35,10 +35,11 @@ else
 }
 
 @code {
-    private IList<User> users;
+   private IList<User> users;
 
-    protected override async Task OnInitializedAsync()
-    {
-        users = await UserService.GetUsers();
-    }
+   protected override Task OnInitializedAsync()
+   {
+       users = UserPersistenceService.Users.FindAll().ToList();
+       return Task.CompletedTask;
+   }
 }

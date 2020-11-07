@@ -5,10 +5,16 @@
 
 <h1>Import Users from ReqResIn</h1>
 
-<button @onclick="OnImportAsync">Import from ReqRes</button>
+<button @onclick="OnDeleteAll">Delete All</button>
+<button @onclick="OnImportAsync">Import</button>
 
 
 @code {
+    void OnDeleteAll()
+    {
+       UserPersistenceService.DeleteAll();
+    }
+
     async Task OnImportAsync()
     {
        await UserPersistenceService.ImportFromApi();

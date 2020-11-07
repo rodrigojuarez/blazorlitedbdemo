@@ -5,6 +5,10 @@
 
 <h1>Show saved Users from ReqResIn</h1>
 
+<input @bind="@SearchTerm" />
+<button @onclick="SearchUsers">Search</button>
+<button @onclick="ClearSearch">Clear</button>
+
 @if (users == null)
 {
     <p><em>Loading...</em></p>
@@ -14,10 +18,10 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
+                <th>Avatar</th>
                 <th>First Name</th>
                 <th>Last Name</th>
-                <th>Avatar</th>
+                <th>Email</th>
                 <th></th>
             </tr>
         </thead>
@@ -25,10 +29,10 @@ else
             @foreach (var user in users)
             {
                 <tr>
-                    <td>@user.Id</td>
+                    <td><img src="@user.Avatar" alt="user avatar" width="50" height="50"></td>
                     <td>@user.FirstName</td>
                     <td>@user.LastName</td>
-                    <td><img src="@user.Avatar" alt="user avatar" width="50" height="50"></td>
+                    <td>@user.Email</td>
                     <td><button @onclick="@(e=>DeleteUser(user.Id))">Delete</button></td>
                 </tr>
             }
@@ -37,22 +41,38 @@ else
 }
 
 @code {
-   private IList<User> users;
+    private IList<User> users;
 
-   protected override Task OnInitializedAsync()
-   {
-       LoadUsers();
-       return Task.CompletedTask;
-   }
+    [Parameter]
+    public string SearchTerm { get; set; }
 
-   void LoadUsers()
-   {
-       users = UserPersistenceService.Users.FindAll().ToList();
-   }
+    protected override Task OnInitializedAsync()
+    {
+        LoadUsers();
+        return Task.CompletedTask;
+    }
 
-   void DeleteUser(int userId)
-   {
-       UserPersistenceService.Delete(userId);
-       LoadUsers();
-   }
+    void LoadUsers()
+    {
+        users = UserPersistenceService.Users.FindAll().ToList();
+    }
+
+    void DeleteUser(int userId)
+    {
+        UserPersistenceService.Delete(userId);
+        ClearSearch();
+    }
+
+    void SearchUsers()
+    {
+        users = UserPersistenceService.Search(SearchTerm);
+    }
+
+
+    void ClearSearch()
+    {
+        SearchTerm = "";
+        LoadUsers();
+    }
+
 }

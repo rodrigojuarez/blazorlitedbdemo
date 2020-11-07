@@ -1,4 +1,6 @@
 ﻿using LiteDB;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ReqResLiteDb.Data
@@ -33,6 +35,14 @@ namespace ReqResLiteDb.Data
       public void Delete(int id)
       {
          Users.Delete(id);
+      }
+
+      public IList<User> Search(string searchTerm)
+      {
+         return Users.Query()
+            .Where(u => u.FirstName.Contains(searchTerm) ||
+               u.LastName.Contains(searchTerm) ||
+               u.Email.Contains(searchTerm)).ToList();
       }
 
    }

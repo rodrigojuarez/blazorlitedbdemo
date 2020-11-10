@@ -19,7 +19,6 @@ namespace ReqResLiteDb.Data
 
       public ILiteCollection<User> Users => _db.GetCollection<User>();
 
-
       public async Task ImportFromApi()
       {
          Users.DeleteAll();
@@ -45,5 +44,14 @@ namespace ReqResLiteDb.Data
                u.Email.Contains(searchTerm)).ToList();
       }
 
+   }
+
+   public class User
+   {
+      public int Id { get; set; }
+      public string Email { get; set; }
+      public string FirstName { get; set; }
+      public string LastName { get; set; }
+      public string Avatar { get; set; }
    }
 }
